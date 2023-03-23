@@ -1,0 +1,64 @@
+﻿@model IEnumerable<CarWebApp.ViewModels.VehicleViewModel>
+
+@{
+	ViewData["Title"] = "Index";
+}
+<partial name="_Notification" />
+<h1>Vehicles</h1>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.RegNumber)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.GarNumber)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ModelSprName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.DriverSprName) 
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Norm)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.RegNumber)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.GarNumber)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ModelSprName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.DriverSprName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Norm)
+				</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.EncryptedId"
+						>Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.EncryptedId"
+						>Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.EncryptedId"
+						>Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+<partial name="_Total" />

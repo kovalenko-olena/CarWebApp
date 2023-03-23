@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" StartReportEvent="_StartReport" ReportInfo.Author="Kovalenko" ReportInfo.Created="02/27/2023 15:55:39" ReportInfo.Modified="03/21/2023 20:10:54" ReportInfo.CreatorVersion="2023.1.0.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+    int km;
+    TimeSpan ts = new TimeSpan();
+
+    private void Data1_BeforePrint(object sender, EventArgs e)
+    {
+      km=((Int32)Report.GetColumnValue(&quot;WayBillSql.SpdIn&quot;))-((Int32)Report.GetColumnValue(&quot;WayBillSql.SpdOut&quot;));
+    }                                                                   
+
+    private void _StartReport(object sender, EventArgs e)
+    {
+       
+    }
+
+    private void Text25_BeforePrint(object sender, EventArgs e)
+    {
+      string nameMonth = &quot;&quot;;
+      switch ((((DateTime)Report.GetColumnValue(&quot;WayBillSql.DtGive&quot;))).Month) 
+      {
+        case 1: nameMonth = &quot;січня&quot;;
+          break;
+        case 2: nameMonth = &quot;лютого&quot;;
+          break;
+        case 3: nameMonth = &quot;березня&quot;;
+          break;
+        case 4: nameMonth = &quot;квітня&quot;;
+          break;
+        case 5: nameMonth = &quot;травня&quot;;
+          break;
+        case 6: nameMonth = &quot;червня&quot;;
+          break;
+        case 7: nameMonth = &quot;липня&quot;;
+          break;
+        case 8: nameMonth = &quot;серпня&quot;;
+          break;
+        case 9: nameMonth = &quot;вересня&quot;;
+          break;
+        case 10: nameMonth = &quot;жовтня&quot;;
+          break;
+        case 11: nameMonth = &quot;листопада&quot;;
+          break;
+        case 12: nameMonth = &quot;грудня&quot;;
+          break;
+      };
+      Text25.Text = nameMonth;
+    }
+
+    private void Text128_BeforePrint(object sender, EventArgs e)
+    {
+      ts = ((DateTime)Report.GetColumnValue(&quot;WayBillSql.DtIn&quot;)) - ((DateTime)Report.GetColumnValue(&quot;WayBillSql.DtOut&quot;));
+      
+    }
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqJUrEa/KIcQqhhcfnlqC6PKK8MheP9IEu4gFWCPXnWzFgLjPP39mqhm6WKckRi90qfWFHDc7eZn2VVrd1T5h+hUNpLAdsH9WeVHp3ia3Dmg8zsjnvLFHhrR/EYQJIyZ3OEarH2YA0+CbxIwVezIHYb0A2h/Gzdgi8qt9JMltW5wlj8DoWnMEKhSTNFnVHvu7Vie0ndtO5Cn7lPIJw1ROfNQ==">
+      <TableDataSource Name="Table1" Alias="WayBillSql" DataType="System.Int32" Enabled="true" TableName="WayBillSql" SelectCommand="Select WayBill.Id,	WayBill.Cd,	DtGive,	DtReturn,	DtOut,	DtIn, SpdOut,	SpdIn,	FuelBalOut,	FuelBalIn,	FuelFillUp,	FuelConsumNorm,	FuelConsumFact, WayBill.CreateDate,	WayBill.EditDate, FuelSpr.Cd as FuelSprCd,	FuelSpr.Name as FuelSprName, Tn,	FirstName,	LastName,	RegNumber,	GarNumber,	Norm, ModelSpr.Cd as ModelCd,	ModelSpr.Name as ModelName, BrandSpr.Cd as BrandCd,	BrandSpr.Name as BrandName &#13;&#10;from WayBill &#13;&#10;left join FuelSpr on WayBill.FuelSprId=FuelSpr.Id&#13;&#10;left join DriverSpr on WayBill.DriverSprId=DriverSpr.Id &#13;&#10;left join VehicleSpr on WayBill.VehicleSprId = VehicleSpr.Id &#13;&#10;left join ModelSpr on VehicleSpr.ModelSprId=ModelSpr.Id &#13;&#10;left join BrandSpr on ModelSpr.BrandSprId=BrandSpr.Id&#13;&#10;">
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Cd" DataType="System.Int32"/>
+        <Column Name="DtGive" DataType="System.DateTime"/>
+        <Column Name="DtReturn" DataType="System.DateTime"/>
+        <Column Name="DtOut" DataType="System.DateTime"/>
+        <Column Name="DtIn" DataType="System.DateTime"/>
+        <Column Name="SpdOut" DataType="System.Int32"/>
+        <Column Name="SpdIn" DataType="System.Int32"/>
+        <Column Name="FuelBalOut" DataType="System.Decimal"/>
+        <Column Name="FuelBalIn" DataType="System.Decimal"/>
+        <Column Name="FuelFillUp" DataType="System.Decimal"/>
+        <Column Name="FuelConsumNorm" DataType="System.Decimal"/>
+        <Column Name="FuelConsumFact" DataType="System.Decimal"/>
+        <Column Name="CreateDate" DataType="System.DateTime"/>
+        <Column Name="EditDate" DataType="System.DateTime"/>
+        <Column Name="FuelSprCd" DataType="System.Int32"/>
+        <Column Name="FuelSprName" DataType="System.String"/>
+        <Column Name="Tn" DataType="System.Int32"/>
+        <Column Name="FirstName" DataType="System.String"/>
+        <Column Name="LastName" DataType="System.String"/>
+        <Column Name="RegNumber" DataType="System.String"/>
+        <Column Name="GarNumber" DataType="System.Int32"/>
+        <Column Name="Norm" DataType="System.Decimal"/>
+        <Column Name="ModelCd" DataType="System.Int32"/>
+        <Column Name="ModelName" DataType="System.String"/>
+        <Column Name="BrandCd" DataType="System.Int32"/>
+        <Column Name="BrandName" DataType="System.String"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Parameter Name="id" DataType="System.Int32" AsString=""/>
+  </Dictionary>
+  <ReportPage Name="Page1" RawPaperSize="9" Watermark.Enabled="true" Watermark.Text="CarWebApp" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2"/>
+    <PageHeaderBand Name="PageHeader1" Top="5.71" Width="718.2" Height="75.6">
+      <TextObject Name="Text1" Left="9.45" Top="9.45" Width="189" Height="37.8" Text="Місце печатки (штампу) підприємства" HorzAlign="Center" Font="Times New Roman, 10pt"/>
+      <TextObject Name="Text2" Left="9.45" Top="47.25" Width="670.95" Height="28.35" Text="Подорожній лист службового легкового автомобіля" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 14pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="87.03" Width="718.2" Height="765.45" BeforePrintEvent="Data1_BeforePrint" DataSource="Table1" Filter="[WayBillSql.Id]==[id]">
+      <TextObject Name="Text23" Left="94.5" Width="94.5" Height="28.35" Border.Lines="Bottom" Text="[WayBillSql.Cd]" HorzAlign="Center" Font="Times New Roman, 14pt, style=Bold"/>
+      <TextObject Name="Text3" Left="47.25" Width="47.25" Height="28.35" Text="№" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text11" Left="642.6" Width="37.8" Height="28.35" Text="року" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text5" Left="444.15" Width="9.45" Height="28.35" Text="&quot;" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text7" Left="481.95" Width="9.45" Height="28.35" Text="&quot;" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text9" Left="585.9" Width="28.35" Height="28.35" Text="20&#13;&#10;" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text24" Left="453.6" Width="28.35" Height="28.35" Border.Lines="Bottom" Text="[Day([WayBillSql.DtGive])]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text25" Left="491.4" Width="94.5" Height="28.35" Border.Lines="Bottom" BeforePrintEvent="Text25_BeforePrint" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text26" Left="614.25" Width="28.35" Height="28.35" Border.Lines="Bottom" Text="[Year([WayBillSql.DtGive])-2000]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text27" Left="9.45" Top="85.05" Width="255.15" Height="18.9" Border.Lines="Bottom" Text="Режим роботи водія" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text28" Left="264.6" Top="85.05" Width="236.25" Height="18.9" Border.Lines="Bottom" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 14pt"/>
+      <TextObject Name="Text29" Left="500.85" Top="66.15" Width="179.55" Height="18.9" Border.Lines="All" Text="Коди" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text30" Left="500.85" Top="85.05" Width="179.55" Height="18.9" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 14pt"/>
+      <TextObject Name="Text31" Left="9.45" Top="122.85" Width="160.65" Height="18.9" Border.Lines="Bottom" Text="Автомобіль" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text32" Left="170.1" Top="103.95" Width="226.8" Height="37.8" Border.Lines="Bottom" Text="[WayBillSql.BrandName]" VertAlign="Center" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text33" Left="396.9" Top="103.95" Width="103.95" Height="37.8" Border.Lines="Bottom" Text="[WayBillSql.RegNumber]" VertAlign="Center" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text34" Left="500.85" Top="103.95" Width="179.55" Height="37.8" Border.Lines="All" Text="[WayBillSql.GarNumber]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text35" Left="9.45" Top="141.75" Width="491.4" Height="18.9" Text="марка, державний номер, гаражний номер" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text36" Left="500.85" Top="141.75" Width="179.55" Height="37.8" Border.Lines="All" Text="[WayBillSql.Tn]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text37" Left="9.45" Top="160.65" Width="66.15" Height="18.9" Border.Lines="Bottom" Text="Водій" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text38" Left="75.6" Top="160.65" Width="425.25" Height="18.9" Border.Lines="Bottom" Text="[WayBillSql.FirstName] [WayBillSql.LastName]" VertAlign="Center" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text39" Left="9.45" Top="179.55" Width="491.4" Height="18.9" Text="прізвище, ім'я, по батькові; номер посвідчення водія" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text40" Left="500.85" Top="179.55" Width="179.55" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 14pt, style=Bold"/>
+      <TextObject Name="Text41" Left="9.45" Top="198.45" Width="491.4" Height="18.9" Border.Lines="Bottom" VertAlign="Center" Font="Times New Roman, 14pt, style=Bold"/>
+      <TextObject Name="Text42" Left="9.45" Top="236.25" Width="340.2" Height="18.9" Border.Lines="All" Text="І. Завдання водієві" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text43" Left="349.65" Top="236.25" Width="330.75" Height="18.9" Border.Lines="All" Text="ІІІ. Рух пального, літрів" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text44" Left="9.45" Top="255.15" Width="151.2" Height="37.8" Border.Lines="All" Text="У чиє розпорядження" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text45" Left="160.65" Top="255.15" Width="94.5" Height="37.8" Border.Lines="All" Text="Час прибуття" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text46" Left="255.15" Top="255.15" Width="94.5" Height="37.8" Border.Lines="All" Text="Час вибуття" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text47" Left="349.65" Top="255.15" Width="170.1" Height="37.8" Border.Lines="All" Text="Марка пального" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text48" Left="519.75" Top="255.15" Width="66.15" Height="37.8" Border.Lines="All" Text="8" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text49" Left="585.9" Top="255.15" Width="94.5" Height="37.8" Border.Lines="All" Text="[WayBillSql.FuelSprName]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text50" Left="9.45" Top="292.95" Width="151.2" Height="18.9" Border.Lines="All" Text="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text51" Left="160.65" Top="292.95" Width="94.5" Height="18.9" Border.Lines="All" Text="2" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text52" Left="255.15" Top="292.95" Width="94.5" Height="18.9" Border.Lines="All" Text="3" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text53" Left="349.65" Top="292.95" Width="170.1" Height="18.9" Border.Lines="All" Text="Код марки" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text54" Left="519.75" Top="292.95" Width="66.15" Height="18.9" Border.Lines="All" Text="9" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text55" Left="585.9" Top="292.95" Width="94.5" Height="18.9" Border.Lines="All" Text="[WayBillSql.FuelSprCd]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text56" Left="9.45" Top="311.85" Width="151.2" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text57" Left="160.65" Top="311.85" Width="94.5" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text58" Left="255.15" Top="311.85" Width="94.5" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text59" Left="349.65" Top="311.85" Width="170.1" Height="37.8" Border.Lines="All" Text="Видано" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text60" Left="519.75" Top="311.85" Width="66.15" Height="37.8" Border.Lines="All" Text="10" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text61" Left="585.9" Top="311.85" Width="94.5" Height="37.8" Border.Lines="All" Text="[WayBillSql.FuelFillUp]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text62" Left="9.45" Top="349.65" Width="151.2" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text63" Left="160.65" Top="349.65" Width="94.5" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text64" Left="255.15" Top="349.65" Width="94.5" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text65" Left="349.65" Top="349.65" Width="170.1" Height="37.8" Border.Lines="All" Text="Залишок при виїзді" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text66" Left="519.75" Top="349.65" Width="66.15" Height="37.8" Border.Lines="All" Text="11" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text67" Left="585.9" Top="349.65" Width="94.5" Height="37.8" Border.Lines="All" Text="[WayBillSql.FuelBalOut]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text68" Left="9.45" Top="387.45" Width="151.2" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text69" Left="160.65" Top="387.45" Width="94.5" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text70" Left="255.15" Top="387.45" Width="94.5" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text71" Left="349.65" Top="387.45" Width="170.1" Height="37.8" Border.Lines="All" Text="Залишок при поверненні" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text72" Left="519.75" Top="387.45" Width="66.15" Height="37.8" Border.Lines="All" Text="12" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text73" Left="585.9" Top="387.45" Width="94.5" Height="37.8" Border.Lines="All" Text="[WayBillSql.FuelBalIn]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text74" Left="9.45" Top="425.25" Width="151.2" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text75" Left="160.65" Top="425.25" Width="94.5" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text76" Left="255.15" Top="425.25" Width="94.5" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text77" Left="349.65" Top="425.25" Width="330.75" Height="37.8" Border.Lines="All" Text="Заправник" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text78" Left="349.65" Top="463.05" Width="330.75" Height="18.9" Text="прізвище, підпис" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text79" Left="9.45" Top="481.95" Width="340.2" Height="18.9" Border.Lines="All" Text="ІІ. Робота водія та автомобіля" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text80" Left="9.45" Top="500.85" Width="189" Height="18.9" Border.Lines="All" Text="Показання спідометра" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text81" Left="198.45" Top="500.85" Width="37.8" Height="18.9" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text82" Left="236.25" Top="500.85" Width="113.4" Height="18.9" Border.Lines="All" Text="х" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text83" Left="9.45" Top="519.75" Width="189" Height="37.8" Border.Lines="All" Text="при виїзді з гаражу" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text84" Left="198.45" Top="519.75" Width="37.8" Height="37.8" Border.Lines="All" Text="4" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text85" Left="236.25" Top="519.75" Width="113.4" Height="37.8" Border.Lines="All" Text="[WayBillSql.SpdOut]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text86" Left="9.45" Top="557.55" Width="189" Height="37.8" Border.Lines="All" Text="при поверненні в гараж" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text87" Left="198.45" Top="557.55" Width="37.8" Height="37.8" Border.Lines="All" Text="5" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text88" Left="236.25" Top="557.55" Width="113.4" Height="37.8" Border.Lines="All" Text="[WayBillSql.SpdIn]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text89" Left="359.1" Top="500.85" Width="321.3" Height="18.9" Text="Водій за станом здоров'я до керування допущений" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text90" Left="359.1" Top="538.65" Width="47.25" Height="37.8" Text="Лікар" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text91" Left="406.35" Top="557.55" Width="274.05" Height="18.9" Border.Lines="Top" Text="прізвище, підпис" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text92" Left="9.45" Top="595.35" Width="189" Height="18.9" Border.Lines="All" Text="Час фактичний" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text93" Left="198.45" Top="595.35" Width="37.8" Height="18.9" Border.Lines="All" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text94" Left="236.25" Top="595.35" Width="113.4" Height="18.9" Border.Lines="All" Text="х" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text95" Left="9.45" Top="614.25" Width="189" Height="37.8" Border.Lines="All" Text="при виїзді з гаражу" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text96" Left="198.45" Top="614.25" Width="37.8" Height="37.8" Border.Lines="All" Text="6" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text97" Left="236.25" Top="614.25" Width="113.4" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text98" Left="9.45" Top="652.05" Width="189" Height="37.8" Border.Lines="All" Text="при поверненні в гараж" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text99" Left="198.45" Top="652.05" Width="37.8" Height="37.8" Border.Lines="All" Text="7" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text100" Left="236.25" Top="652.05" Width="113.4" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Bold"/>
+      <TextObject Name="Text101" Left="359.1" Top="614.25" Width="56.7" Height="28.35" Text="Механік" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text102" Left="415.8" Top="623.7" Width="264.6" Height="18.9" Border.Lines="Top" Text="прізвище, підпис" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text103" Left="359.1" Top="580.45" Width="170.1" Height="28.35" Text="Виїзд дозволений" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text104" Left="359.1" Top="652.05" Width="85.05" Height="37.8" Text="Автомобіль прийняв" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text105" Left="444.15" Top="661.5" Width="236.25" Height="28.35" Border.Lines="Top" Text="підпис водія" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text106" Left="359.1" Top="689.85" Width="85.05" Height="37.8" Text="Автомобіль здав" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text107" Left="444.15" Top="699.3" Width="236.25" Height="28.35" Border.Lines="Top" Text="підпис водія" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text108" Left="359.1" Top="727.65" Width="85.05" Height="37.8" Text="Автомобіль прийняв" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text109" Left="444.15" Top="737.1" Width="236.25" Height="28.35" Border.Lines="Top" Text="підпис механіка" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text110" Left="18.9" Top="708.75" Width="207.9" Height="47.25" Text="Посвідчення водія перевірив, завдання видав" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text111" Left="103.95" Top="737.1" Width="236.25" Height="18.9" Border.Lines="Top" Text="підпис диспечера" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt"/>
+    </DataBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="858.19" Width="718.2" Height="37.8"/>
+    <PageFooterBand Name="PageFooter1" Top="901.71" Width="718.2" Height="18.9"/>
+  </ReportPage>
+  <ReportPage Name="Page2" RawPaperSize="9" Watermark.Enabled="true" Watermark.Text="CarWebApp" Watermark.Font="Arial, 60pt" Watermark.TextRotation="BackwardDiagonal">
+    <ReportTitleBand Name="ReportTitle2" Width="718.2" Height="37.8">
+      <TextObject Name="Text112" Left="415.8" Top="9.45" Width="198.45" Height="18.9" Text="Зворотній бік типової форми №3" Font="Times New Roman, 9pt"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader2" Top="41.4" Width="718.2" Height="28.35"/>
+    <DataBand Name="Data2" Top="73.34" Width="718.2" Height="567" DataSource="Table1" Filter="[WayBillSql.Id]==[id]">
+      <TextObject Name="Text113" Left="9.45" Width="680.4" Height="28.35" Border.Lines="All" Text="IV. Результати роботи автомобіля" HorzAlign="Center" Font="Times New Roman, 11pt, style=Bold"/>
+      <TextObject Name="Text114" Left="9.45" Top="28.35" Width="236.25" Height="28.35" Border.Lines="All" Text="Витрати пального, л" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text115" Left="245.7" Top="28.35" Width="122.85" Height="56.7" Border.Lines="All" Text="Загальний пробіг, км" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text116" Left="368.55" Top="28.35" Width="321.3" Height="56.7" Border.Lines="All" Text="Час у наряді, год" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text117" Left="9.45" Top="56.7" Width="122.85" Height="28.35" Border.Lines="All" Text="за нормою" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text120" Left="9.45" Top="85.05" Width="122.85" Height="28.35" Border.Lines="All" Text="13" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text121" Left="245.7" Top="85.05" Width="122.85" Height="28.35" Border.Lines="All" Text="15" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text122" Left="368.55" Top="85.05" Width="321.3" Height="28.35" Border.Lines="All" Text="16" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text124" Left="132.3" Top="56.7" Width="113.4" Height="28.35" Border.Lines="All" Text="фактично" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text125" Left="132.3" Top="85.05" Width="113.4" Height="28.35" Border.Lines="All" Text="14" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text126" Left="9.45" Top="113.4" Width="122.85" Height="56.7" Border.Lines="All" Text="[WayBillSql.FuelConsumNorm]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text127" Left="245.7" Top="113.4" Width="122.85" Height="56.7" Border.Lines="All" Text="[km]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text128" Left="368.55" Top="113.4" Width="321.3" Height="56.7" Border.Lines="All" BeforePrintEvent="Text128_BeforePrint" Text="[ts.TotalHours]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator=" " Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text129" Left="132.3" Top="113.4" Width="113.4" Height="56.7" Border.Lines="All" Text="[WayBillSql.FuelConsumFact]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text130" Left="9.45" Top="170.1" Width="122.85" Height="56.7" Border.Lines="All" Text="Пробіг по місту" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text131" Left="245.7" Top="170.1" Width="122.85" Height="56.7" Border.Lines="All" Text="Пробіг за містом" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text132" Left="368.55" Top="170.1" Width="103.95" Height="56.7" Border.Lines="All" Text="Прогрів автомобіля" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text133" Left="132.3" Top="170.1" Width="113.4" Height="56.7" Border.Lines="All" Text="Пробіг по карьєру" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text134" Left="472.5" Top="170.1" Width="113.4" Height="56.7" Border.Lines="All" Text="Простої автомобіля" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text135" Left="585.9" Top="170.1" Width="103.95" Height="56.7" Border.Lines="All" Text="Часті технологічні зупинки" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text136" Left="9.45" Top="226.8" Width="122.85" Height="28.35" Border.Lines="All" Text="17" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text137" Left="245.7" Top="226.8" Width="122.85" Height="28.35" Border.Lines="All" Text="19" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text138" Left="368.55" Top="226.8" Width="103.95" Height="28.35" Border.Lines="All" Text="20" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text139" Left="132.3" Top="226.8" Width="113.4" Height="28.35" Border.Lines="All" Text="18" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text140" Left="472.5" Top="226.8" Width="113.4" Height="28.35" Border.Lines="All" Text="21" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text141" Left="585.9" Top="226.8" Width="103.95" Height="28.35" Border.Lines="All" Text="22" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 9pt, style=Bold"/>
+      <TextObject Name="Text142" Left="9.45" Top="255.15" Width="122.85" Height="56.7" Border.Lines="All" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text143" Left="245.7" Top="255.15" Width="122.85" Height="56.7" Border.Lines="All" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text144" Left="368.55" Top="255.15" Width="103.95" Height="56.7" Border.Lines="All" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text145" Left="132.3" Top="255.15" Width="113.4" Height="56.7" Border.Lines="All" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text146" Left="472.5" Top="255.15" Width="113.4" Height="56.7" Border.Lines="All" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text147" Left="585.9" Top="255.15" Width="103.95" Height="56.7" Border.Lines="All" Font="Times New Roman, 9pt"/>
+      <TextObject Name="Text148" Left="9.45" Top="368.55" Width="330.75" Height="28.35" Text="Особа, що користувалася автомобілем" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text149" Left="340.2" Top="378" Width="330.75" Height="28.35" Border.Lines="Top" Text="підпис, печатка(штамп)" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text150" Left="9.45" Top="434.7" Width="151.2" Height="28.35" Text="Особливі відмітки" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text151" Left="160.65" Top="434.7" Width="510.3" Height="28.35" Border.Lines="Bottom" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text152" Left="9.45" Top="463.05" Width="661.5" Height="28.35" Border.Lines="Bottom" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text153" Left="9.45" Top="491.4" Width="661.5" Height="28.35" Border.Lines="Bottom" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+      <TextObject Name="Text154" Left="9.45" Top="519.75" Width="661.5" Height="28.35" Border.Lines="Bottom" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 11pt"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter2" Top="643.94" Width="718.2" Height="18.9"/>
+  </ReportPage>
+</Report>

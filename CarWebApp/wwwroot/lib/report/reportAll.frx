@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" StartReportEvent="_StartReport" ReportInfo.Author="Kovalenko" ReportInfo.Created="02/27/2023 15:55:39" ReportInfo.Modified="03/23/2023 11:42:20" ReportInfo.CreatorVersion="2023.1.0.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  { 
+    private void _StartReport(object sender, EventArgs e)
+    {
+       
+    }
+
+    private void Text57_BeforePrint(object sender, EventArgs e)
+    {
+      TimeSpan ts_detail = new TimeSpan();
+      ts_detail =((DateTime)Report.GetColumnValue(&quot;WayBillDetail.DtIn&quot;)) - ((DateTime)Report.GetColumnValue(&quot;WayBillDetail.DtOut&quot;));
+     
+      double tsMinutes = ts_detail.TotalMinutes;
+      double result = (tsMinutes/60);
+      Text57.Text = result.ToString(&quot;N2&quot;);
+      
+    }
+  }
+}
+</ScriptText>
+  <Styles>
+    <Style Name="Style1" Border.Lines="All" Fill.Color="Yellow" Font="Times New Roman, 12pt"/>
+    <Style Name="Style2" Border.Lines="All" Font="Times New Roman, 12pt"/>
+  </Styles>
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqJUrEa/KIcQqhhcfnlqC6PKK8MheP9IEu4gFWCPXnWzFgLjPP39mqhm6WKckRi90qfWFHDc7eZn2VVrd1T5h+hUNpLAdsH9WeVHp3ia3Dmg8zsjnvLFHhrR/EYQJIyZ3OEarH2YA0+CbxIwVezIHYb0A2h/Gzdgi8qt9JMltW5wlj8DoWnMEKhSTNFnVHvu7VFbK2WhPQjJBCVzlaPGu1ew==">
+      <TableDataSource Name="Table1" Alias="WayBillSql" DataType="System.Int32" Enabled="true" TableName="WayBillSql" SelectCommand="Select &#13;&#10;	wb.minFuelSprName,&#13;&#10;	wb.km,&#13;&#10;	wb.hrs,&#13;&#10;	wb.smFuelFillUp,	&#13;&#10;	wb.smFuelConsumNorm,	&#13;&#10;	wb.smFuelConsumFact,&#13;&#10;	RegNumber,	&#13;&#10;	GarNumber,	&#13;&#10;	Norm, &#13;&#10;	ModelSpr.Cd as ModelCd,	&#13;&#10;	ModelSpr.Name as ModelName, &#13;&#10;	BrandSpr.Cd as BrandCd,	&#13;&#10;	BrandSpr.Name as BrandName,&#13;&#10;	(&#13;&#10;	select top 1 v.FuelBalIn &#13;&#10;	from WayBill v &#13;&#10;	where v.VehicleSprId = VehicleSpr.Id &#13;&#10;	and v.DtReturn&lt;=@dtparam&#13;&#10;	order by v.DtIn desc&#13;&#10;	) as lastFuel,&#13;&#10;	startFuel.Fuel as startFuel,&#13;&#10;	endFuel.Fuel as endFuel &#13;&#10;from VehicleSpr&#13;&#10;left join ModelSpr on VehicleSpr.ModelSprId=ModelSpr.Id &#13;&#10;left join BrandSpr on ModelSpr.BrandSprId=BrandSpr.Id&#13;&#10;left join &#13;&#10;	(select VehicleSprId,&#13;&#10;--пусть качество топлива ухудшается при смешивании&#13;&#10;		min(FuelSpr.Name) as minFuelSprName,&#13;&#10;		Sum(datediff(hour, DtOut, DtIn)) as hrs,&#13;&#10;		Sum(SpdIn - SpdOut) as km,&#13;&#10;		Sum(FuelFillUp) as smFuelFillUp,	&#13;&#10;		Sum(FuelConsumNorm) as smFuelConsumNorm,	&#13;&#10;		Sum(FuelConsumFact) as smFuelConsumFact&#13;&#10;	from WayBill&#13;&#10;	left join FuelSpr on WayBill.FuelSprId=FuelSpr.Id&#13;&#10;	where  DtReturn&gt;=@dt1param and DtReturn&lt;=@dt2param&#13;&#10;	group by VehicleSprId&#13;&#10;	) wb on wb.VehicleSprId = VehicleSpr.Id &#13;&#10;left join &#13;&#10;	(select vb.FuelBalOut as Fuel, vb.VehicleSprId &#13;&#10;	from WayBill vb&#13;&#10;	where vb.DtIn = (select min(DtIn) &#13;&#10;	from WayBill vbb&#13;&#10;	where vbb.VehicleSprId = vb.VehicleSprId&#13;&#10;	and DtReturn&gt;=@dt1param and DtReturn&lt;=@dt2param&#13;&#10;	)&#13;&#10;	) startFuel on startFuel.VehicleSprId = VehicleSpr.Id &#13;&#10;left join &#13;&#10;	(select vb.FuelBalIn as Fuel, vb.VehicleSprId &#13;&#10;	from WayBill vb&#13;&#10;	where vb.DtIn = (select max(DtIn) &#13;&#10;	from WayBill vbb&#13;&#10;	where vbb.VehicleSprId = vb.VehicleSprId&#13;&#10;	and DtReturn&gt;=@dt1param and DtReturn&lt;=@dt2param&#13;&#10;	)&#13;&#10;	) endFuel on endFuel.VehicleSprId = VehicleSpr.Id &#13;&#10;order by ModelSpr.Name, BrandSpr.Name, GarNumber">
+        <Column Name="RegNumber" DataType="System.String"/>
+        <Column Name="GarNumber" DataType="System.Int32"/>
+        <Column Name="Norm" DataType="System.Decimal"/>
+        <Column Name="ModelCd" DataType="System.Int32"/>
+        <Column Name="ModelName" DataType="System.String"/>
+        <Column Name="BrandCd" DataType="System.Int32"/>
+        <Column Name="BrandName" DataType="System.String"/>
+        <Column Name="km" DataType="System.Int32"/>
+        <Column Name="lastFuel" DataType="System.Decimal"/>
+        <Column Name="minFuelSprName" DataType="System.String"/>
+        <Column Name="smFuelFillUp" DataType="System.Decimal"/>
+        <Column Name="smFuelConsumNorm" DataType="System.Decimal"/>
+        <Column Name="smFuelConsumFact" DataType="System.Decimal"/>
+        <Column Name="startFuel" DataType="System.Decimal"/>
+        <Column Name="endFuel" DataType="System.Decimal"/>
+        <Column Name="hrs" DataType="System.Int32"/>
+        <CommandParameter Name="dtparam" DataType="4" Expression="[dt1]"/>
+        <CommandParameter Name="dt1param" DataType="4" Expression="[dt1]"/>
+        <CommandParameter Name="dt2param" DataType="4" Expression="[dt2]"/>
+      </TableDataSource>
+      <TableDataSource Name="Table" Alias="WayBillDetail" DataType="System.Int32" Enabled="true" TableName="WayBillGroup" SelectCommand="Select wb.Id,	&#13;&#10;	wb.Cd,	&#13;&#10;	wb.DtGive,	&#13;&#10;	wb.DtReturn,	&#13;&#10;	wb.DtOut,	&#13;&#10;	wb.DtIn, &#13;&#10;	wb.SpdIn - wb.SpdOut as km,	&#13;&#10;	wb.FuelBalOut,	&#13;&#10;	wb.FuelBalIn,&#13;&#10;	wb.FuelFillUp,	&#13;&#10;	wb.FuelConsumNorm,	&#13;&#10;	wb.FuelConsumFact, &#13;&#10;	wb.CreateDate,	&#13;&#10;	wb.EditDate, &#13;&#10;	wb.FuelSprCd as FuelSprCd,	&#13;&#10;	wb.FuelSprName as FuelSprName, &#13;&#10;	wb.Tn,	&#13;&#10;	wb.FirstName,	&#13;&#10;	wb.LastName,	&#13;&#10;	RegNumber,	&#13;&#10;	GarNumber,	&#13;&#10;	Norm, &#13;&#10;	ModelSpr.Cd as ModelCd,	&#13;&#10;	ModelSpr.Name as ModelName, &#13;&#10;	BrandSpr.Cd as BrandCd,	&#13;&#10;	BrandSpr.Name as BrandName &#13;&#10;from VehicleSpr&#13;&#10;left join ModelSpr on VehicleSpr.ModelSprId=ModelSpr.Id &#13;&#10;left join BrandSpr on ModelSpr.BrandSprId=BrandSpr.Id&#13;&#10;left join &#13;&#10;	(select VehicleSprId,&#13;&#10;		FuelSpr.Cd as FuelSprCd,	&#13;&#10;		FuelSpr.Name as FuelSprName,&#13;&#10;		WayBill.Id,	&#13;&#10;		WayBill.Cd,	&#13;&#10;		DtGive,	&#13;&#10;		DtReturn,	&#13;&#10;		DtOut,	&#13;&#10;		DtIn, &#13;&#10;		SpdOut,	&#13;&#10;		SpdIn,	&#13;&#10;		FuelBalOut,	&#13;&#10;		FuelBalIn,	&#13;&#10;		FuelFillUp,	&#13;&#10;		FuelConsumNorm,	&#13;&#10;		FuelConsumFact, &#13;&#10;		WayBill.CreateDate,	&#13;&#10;		WayBill.EditDate, 	&#13;&#10;		Tn,	&#13;&#10;		FirstName,	&#13;&#10;		LastName&#13;&#10;	from WayBill&#13;&#10;	left join FuelSpr on WayBill.FuelSprId=FuelSpr.Id&#13;&#10;	left join DriverSpr on WayBill.DriverSprId=DriverSpr.Id &#13;&#10;	&#13;&#10;	) wb on wb.VehicleSprId = VehicleSpr.Id &#13;&#10;order by ModelSpr.Name, BrandSpr.Name, GarNumber, DtOut">
+        <Column Name="RegNumber" DataType="System.String"/>
+        <Column Name="GarNumber" DataType="System.Int32"/>
+        <Column Name="ModelCd" DataType="System.Int32"/>
+        <Column Name="ModelName" DataType="System.String"/>
+        <Column Name="BrandCd" DataType="System.Int32"/>
+        <Column Name="BrandName" DataType="System.String"/>
+        <Column Name="FuelSprName" DataType="System.String"/>
+        <Column Name="Id" DataType="System.Int32"/>
+        <Column Name="Cd" DataType="System.Int32"/>
+        <Column Name="DtGive" DataType="System.DateTime"/>
+        <Column Name="DtReturn" DataType="System.DateTime"/>
+        <Column Name="DtOut" DataType="System.DateTime"/>
+        <Column Name="DtIn" DataType="System.DateTime"/>
+        <Column Name="km" DataType="System.Int32"/>
+        <Column Name="FuelBalOut" DataType="System.Decimal"/>
+        <Column Name="FuelBalIn" DataType="System.Decimal"/>
+        <Column Name="FuelFillUp" DataType="System.Decimal"/>
+        <Column Name="FuelConsumNorm" DataType="System.Decimal"/>
+        <Column Name="FuelConsumFact" DataType="System.Decimal"/>
+        <Column Name="CreateDate" DataType="System.DateTime"/>
+        <Column Name="EditDate" DataType="System.DateTime"/>
+        <Column Name="FuelSprCd" DataType="System.Int32"/>
+        <Column Name="Tn" DataType="System.Int32"/>
+        <Column Name="FirstName" DataType="System.String"/>
+        <Column Name="LastName" DataType="System.String"/>
+        <Column Name="Norm" DataType="System.Decimal"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Relation Name="Table1_WayBill" ParentDataSource="Table1" ChildDataSource="null" ParentColumns="FuelSprName&#13;&#10;RegNumber" ChildColumns="FuelSprName&#13;&#10;RegNumber" Enabled="true"/>
+    <Parameter Name="dt1" DataType="System.DateTime" AsString=""/>
+    <Parameter Name="dt2" DataType="System.DateTime" AsString=""/>
+    <Total Name="Total" Expression="[WayBillSql.km]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+    <Total Name="TotalFuelIn" Expression="[WayBillSql.startFuel]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+    <Total Name="TotalFuelFillUp" Expression="[WayBillSql.smFuelFillUp]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+    <Total Name="TotalConsum" Expression="[WayBillSql.smFuelConsumFact]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+    <Total Name="TotalFuelOut" Expression="[WayBillSql.endFuel]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+    <Total Name="TotalGroup" Expression="[WayBillSql.km]" Evaluator="Data1" PrintOn="GroupFooter1" ResetOnReprint="true" IncludeInvisibleRows="true"/>
+    <Total Name="TotalFuelUpGroup" Expression="[WayBillSql.smFuelFillUp]" Evaluator="Data1" PrintOn="GroupFooter1" ResetOnReprint="true" IncludeInvisibleRows="true"/>
+    <Total Name="TotalConsumGroup" Expression="[WayBillSql.smFuelConsumFact]" Evaluator="Data1" PrintOn="GroupFooter1" ResetOnReprint="true" IncludeInvisibleRows="true"/>
+    <Total Name="TotalHrs" Expression="[WayBillSql.hrs]" Evaluator="Data1"/>
+  </Dictionary>
+  <ReportPage Name="Page1" RawPaperSize="9" Watermark.Enabled="true" Watermark.Text="CarWebApp" Watermark.Font="Arial, 60pt" Watermark.TextFill.Color="40, 0, 255, 255">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="75.6">
+      <TextObject Name="Text1" Left="94.5" Width="434.7" Height="28.35" Text="Залишки палива по автомобілям" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 14pt"/>
+      <TextObject Name="Text2" Left="94.5" Top="37.8" Width="122.85" Height="28.35" Text="за період з" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 14pt"/>
+      <TextObject Name="Text4" Left="378" Top="37.8" Width="56.7" Height="28.35" Text="по" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 14pt"/>
+      <TextObject Name="Text5" Left="217.35" Top="37.8" Width="160.65" Height="28.35" Text="[dt1] р." Format="Date" Format.Format="d" VertAlign="Center" Font="Times New Roman, 14pt"/>
+      <TextObject Name="Text6" Left="434.7" Top="37.8" Width="160.65" Height="28.35" Text="[dt2] р." Format="Date" Format.Format="d" VertAlign="Center" Font="Times New Roman, 14pt"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="81.31" Width="718.2" Height="75.6">
+      <TextObject Name="Text8" Left="28.35" Width="255.15" Height="37.8" Border.Lines="All" Text="Автомобіль" Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text7" Width="28.35" Height="75.6" Border.Lines="All" Text="№ з/п" Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Angle="270" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text12" Left="283.5" Width="37.8" Height="75.6" Border.Lines="All" Text="Паливо" Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Angle="270" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text13" Left="321.3" Width="56.7" Height="75.6" Border.Lines="All" Text="Пробіг, км" Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text14" Left="378" Width="75.6" Height="75.6" Border.Lines="All" Text="Залишок поч." Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text15" Left="453.6" Width="66.15" Height="75.6" Border.Lines="All" Text="Видано" Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt" Wysiwyg="true"/>
+      <TextObject Name="Text16" Left="519.75" Width="66.15" Height="75.6" Border.Lines="All" Text="Факт. витрата" Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text17" Left="585.9" Width="75.6" Height="75.6" Border.Lines="All" Text="Залишок кінц." Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text18" Left="661.5" Width="56.7" Height="75.6" Border.Lines="All" Text="Час роботи" Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text9" Left="28.35" Top="37.8" Width="94.5" Height="37.8" Border.Lines="All" Text="Модель" Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text10" Left="122.85" Top="37.8" Width="75.6" Height="37.8" Border.Lines="All" Text="Марка" Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text11" Left="198.45" Top="37.8" Width="85.05" Height="37.8" Border.Lines="All" Text="Номер" Padding="0, 0, 0, 0" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+    </PageHeaderBand>
+    <GroupHeaderBand Name="GroupHeader1" Top="168.34" Width="718.2" CanGrow="true" BeforePrintEvent="GroupHeader1_BeforePrint" Condition="[WayBillSql.RegNumber]+' '+[WayBillSql.minFuelSprName]">
+      <ChildBand Name="Child1" Top="174.06" Width="718.2"/>
+      <DataHeaderBand Name="DataHeader2" Top="162.63" Width="718.2"/>
+      <DataBand Name="Data1" Top="179.77" Width="718.2" BeforePrintEvent="Data1_BeforePrint" AfterPrintEvent="Data1_AfterPrint" AfterDataEvent="Data1_AfterData" DataSource="Table1" ParentIdColumn="Нет"/>
+      <GroupFooterBand Name="GroupFooter1" Top="185.49" Width="718.2" Height="47.25" AfterPrintEvent="GroupFooter1_AfterPrint">
+        <TextObject Name="Text29" Left="661.5" Width="56.7" Height="47.25" Border.Lines="All" GrowToBottom="true" Text="[WayBillSql.hrs]" HideZeros="true" Format="Number" Format.UseLocale="false" Format.DecimalDigits="0" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+        <TextObject Name="Text19" Width="28.35" Height="47.25" Border.Lines="All" GrowToBottom="true" Text="[Row#]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+        <TextObject Name="Text20" Left="28.35" Width="94.5" Height="47.25" Border.Lines="All" CanGrow="true" CanShrink="true" GrowToBottom="true" CanBreak="false" Text="[WayBillSql.ModelName]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt" Wysiwyg="true"/>
+        <TextObject Name="Text21" Left="122.85" Width="75.6" Height="47.25" Border.Lines="All" GrowToBottom="true" Text="[WayBillSql.BrandName]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+        <TextObject Name="Text22" Left="198.45" Width="85.05" Height="47.25" Border.Lines="All" GrowToBottom="true" Text="[WayBillSql.RegNumber]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+        <TextObject Name="Text23" Left="283.5" Width="37.8" Height="47.25" Border.Lines="All" GrowToBottom="true" Text="[WayBillSql.minFuelSprName]" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+        <TextObject Name="Text24" Left="321.3" Width="56.7" Height="47.25" Border.Lines="All" GrowToBottom="true" Text="[TotalGroup]" HideZeros="true" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+        <TextObject Name="Text26" Left="453.6" Width="66.15" Height="47.25" Border.Lines="All" GrowToBottom="true" Text="[TotalFuelUpGroup]" HideZeros="true" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+        <TextObject Name="Text27" Left="519.75" Width="66.15" Height="47.25" Border.Lines="All" GrowToBottom="true" Text="[TotalConsumGroup]" HideZeros="true" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+        <TextObject Name="Text55" Left="585.9" Width="75.6" Height="47.25" Border.Lines="All" Text="[WayBillSql.endFuel]" HideZeros="true" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt" Style="Style2">
+          <Highlight>
+            <Condition Expression="IIf(([WayBillSql.startFuel]==0 &amp;&amp;  [WayBillSql.endFuel]==0),1==2,( [WayBillSql.startFuel]+ [WayBillSql.smFuelFillUp] - [WayBillSql.smFuelConsumFact] != [WayBillSql.endFuel] ))" Fill="PathGradient" Fill.CenterColor="Yellow" Fill.EdgeColor="White" Fill.Style="Rectangular" Font="Times New Roman, 12pt, style=Bold" ApplyFill="true" ApplyTextFill="false" ApplyFont="true"/>
+          </Highlight>
+        </TextObject>
+        <TextObject Name="Text62" Left="378" Width="75.6" Height="47.25" Border.Lines="All" Text="[WayBillSql.startFuel]" HideZeros="true" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+        <ChildBand Name="Child3" Top="238.45" Width="718.2" Height="18.9">
+          <SubreportObject Name="Subreport3" Width="94.5" Height="18.9" ReportPage="Page4"/>
+        </ChildBand>
+      </GroupFooterBand>
+    </GroupHeaderBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="263.06" Width="718.2" Height="37.8">
+      <TextObject Name="Text44" Left="321.3" Width="56.7" Height="28.35" Border.Lines="All" Text="[Total]" HideZeros="true" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text45" Left="661.5" Width="56.7" Height="28.35" Border.Lines="All" Text="[TotalHrs]" HideZeros="true" Format="Number" Format.UseLocale="false" Format.DecimalDigits="0" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text46" Width="321.3" Height="28.35" Border.Lines="All" Text="Всього:" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text47" Left="378" Width="75.6" Height="28.35" Border.Lines="All" Text="[TotalFuelIn]" HideZeros="true" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text48" Left="453.6" Width="66.15" Height="28.35" Border.Lines="All" Text="[TotalFuelFillUp]" HideZeros="true" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text49" Left="519.75" Width="66.15" Height="28.35" Border.Lines="All" Text="[TotalConsum]" HideZeros="true" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+      <TextObject Name="Text50" Left="585.9" Width="75.6" Height="28.35" Border.Lines="All" Text="[TotalFuelOut]" HideZeros="true" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 12pt"/>
+    </ReportSummaryBand>
+    <PageFooterBand Name="PageFooter1" Top="306.58" Width="718.2" Height="18.9"/>
+  </ReportPage>
+  <ReportPage Name="Page4" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data4" Width="718.2" Height="28.35" CanGrow="true" DataSource="Table" Filter="[WayBillDetail.RegNumber]==[WayBillSql.RegNumber]&amp;&amp;[WayBillDetail.Id]!=0&amp;&amp;[WayBillDetail.DtReturn]&gt;=[dt1]&amp;&amp;[WayBillDetail.DtReturn]&lt;=[dt2]" KeepTogether="true">
+      <TextObject Name="Text56" Left="321.3" Width="56.7" Height="28.35" Border.Lines="All" BeforePrintEvent="Text31_BeforePrint" AfterDataEvent="Text31_AfterData" Text="[WayBillDetail.km]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Italic"/>
+      <TextObject Name="Text57" Left="661.5" Width="56.7" Height="28.35" Border.Lines="All" BeforePrintEvent="Text57_BeforePrint" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Italic"/>
+      <TextObject Name="Text58" Left="378" Width="75.6" Height="28.35" Border.Lines="All" Text="[WayBillDetail.FuelBalOut]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Italic"/>
+      <TextObject Name="Text59" Left="453.6" Width="66.15" Height="28.35" Border.Lines="All" Text="[WayBillDetail.FuelFillUp]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Italic"/>
+      <TextObject Name="Text60" Left="519.75" Width="66.15" Height="28.35" Border.Lines="All" Text="[WayBillDetail.FuelConsumFact]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Italic"/>
+      <TextObject Name="Text61" Left="585.9" Width="75.6" Height="28.35" Border.Lines="All" Text="[WayBillDetail.FuelBalIn]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="Times New Roman, 10pt, style=Italic"/>
+      <TextObject Name="Text63" Width="321.3" Height="28.35" Border.Lines="All" Text="Подорожній лист [WayBillDetail.Cd] від [WayBillDetail.DtGive]" VertAlign="Center" Font="Times New Roman, 10pt, style=Italic">
+        <Formats>
+          <GeneralFormat/>
+          <DateFormat/>
+        </Formats>
+      </TextObject>
+    </DataBand>
+  </ReportPage>
+</Report>

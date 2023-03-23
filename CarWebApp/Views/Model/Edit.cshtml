@@ -1,0 +1,63 @@
+﻿@model CarWebApp.ViewModels.ModelViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+
+}
+
+<h1>Edit</h1>
+
+<h4>ModelSpr</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="EncryptedId" />
+            <div class="form-group">
+                <label asp-for="Cd" class="control-label"></label>
+                <input asp-for="Cd" class="form-control" />
+                <span asp-validation-for="Cd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="width:auto">
+                <label asp-for="FuelSprName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="FuelSpr.Id" asp-items="@ViewBag.Fuel" class="custom-select mr-sm-2">
+                        <option value="@ViewBag.Fuel"></option>
+                    </select>
+                </div>
+                <span asp-validation-for="FuelSpr" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="width:auto">
+                <label asp-for="BrandSprName" class="control-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="BrandSpr.Id" asp-items="@ViewBag.Brand" class="custom-select mr-sm-2">
+                        <option value="@ViewBag.Brand"></option>
+                    </select>
+                </div>
+                <span asp-validation-for="BrandSpr" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="break-before:region">
+                <label></label>
+                <div class="col-sm-10">
+                <input type="submit" value="Save" 
+                    class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

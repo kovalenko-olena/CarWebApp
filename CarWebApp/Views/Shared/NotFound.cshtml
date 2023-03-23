@@ -1,0 +1,14 @@
+﻿@{
+	ViewBag.Title = "Not Found";
+}
+
+<h1>
+	@ViewBag.ErrorMessage	
+	<!--
+		@ViewBag.Path
+	@ViewBag.QS
+	-->
+</h1>
+<a asp-action="Index" asp-controller="Home">
+	Click here to navigate to the home page
+</a>

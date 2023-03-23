@@ -1,0 +1,60 @@
+﻿@model IEnumerable<CarWebApp.ViewModels.ModelViewModel>
+
+@{
+	ViewData["Title"] = "Index";
+}
+<partial name="_Notification" />
+<h1>Models</h1>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Cd)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Name)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.FuelSprName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.BrandSprName)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Cd)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.FuelSprName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.BrandSprName)
+				</td>
+
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.EncryptedId"
+						>Edit</a> |
+					<a asp-action="Details" asp-route-id="@item?.EncryptedId"
+						>Details</a> |
+					<a asp-action="Delete" asp-route-id="@item?.EncryptedId"
+						>Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+	
+</table>
+<partial name="_Total" />

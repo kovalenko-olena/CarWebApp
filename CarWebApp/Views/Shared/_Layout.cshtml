@@ -1,0 +1,140 @@
+﻿@inject SignInManager<ApplicationUser> signInManager;
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - CarWebApp</title>
+
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+	<link rel="stylesheet" href="~/CarWebApp.styles.css" asp-append-version="true" />
+
+	<environment include="Development">
+	</environment>
+	<environment exclude="Development">
+		<script src="~/lib/jquery/dist/jquery.js"></script>
+		<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+		<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+		<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+	</environment>
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+			<div class="container-fluid">
+				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+					<img src="~/lib/jpg/car.jpg" />CarWebApp
+				</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					<ul class="navbar-nav flex-grow-1">
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Fuel" asp-action="Index">Fuel</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Brand" asp-action="Index">Brand</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Driver" asp-action="Index">Driver</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Model" asp-action="Index">Model</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Vehicle" asp-action="Index">Vehicle</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Waybill" asp-action="Index">Waybills</a>
+						</li>
+
+						<!--
+						if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+
+						-->
+						@if ((signInManager.IsSignedIn(User) && User.IsInRole("Admin")) || (signInManager.IsSignedIn(User) && signInManager.UserManager.Users.Count() == 1))
+						{
+							<li class="dropdown">
+								<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-bs-toggle="dropdown"
+							   aria-expanded="false" aria-haspopup="true">
+									Manage
+								</a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+									<a class="dropdown-item" asp-action="ListUsers"
+								   asp-controller="Administration">Users</a>
+									<a class="dropdown-item" asp-action="ListRoles"
+								   asp-controller="Administration">Roles</a>
+									<a class="dropdown-item" asp-action="ChangePassword"
+								   asp-controller="Account">Change password</a>
+								</div>
+							</li>
+						}
+					</ul>
+					<ul class="navbar-nav ml-auto">
+						@if (signInManager.IsSignedIn(User))
+						{
+							<li class="nav-item">
+								<form method="post" asp-action="logout" asp-controller="account">
+									<button type="submit" class="nav-link btn btn-link py-0"
+										style="width:auto">
+										Logout @User.Identity?.Name
+									</button>
+								</form>
+							</li>
+						}
+						else
+						{
+							<li class="nav-item">
+								<a asp-action="Register" asp-controller="Account" class="nav-link text-dark">Register</a>
+							</li>
+							<li class="nav-item">
+								<a asp-action="Login" asp-controller="Account" class="nav-link text-danger">Login</a>
+							</li>
+						}
+
+					</ul>
+					<!--
+					<partial name="_LoginPartial" />
+					-->
+				</div>
+			</div>
+		</nav>
+	</header>
+	<div class="container">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+
+	<footer class="border-top footer text-muted">
+		<div class="container">
+			<div class="row">
+				<div class="col-6" style="text-align:left">
+					&copy; 2023 - CarWebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+				</div>
+				<div class="col-6" style="text-align:right">
+					Today is @DateTime.Today.ToString("D"). What a wonderful day.
+				</div>
+			</div>
+		</div>
+
+
+	</footer>
+
+
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

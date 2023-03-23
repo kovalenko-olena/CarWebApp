@@ -1,0 +1,179 @@
+﻿@model CarWebApp.ViewModels.WayBillViewModel
+
+@{
+	ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+<h4>WayBill</h4>
+<hr />
+
+<div class="row">
+	<form asp-action="Edit">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+		<div class="input-group mb-3">
+			<span class="input-group-text col-md-3">
+				<label asp-for="Cd" class="control-label"></label>
+			</span>
+			<input asp-for="Cd" class="form-control" />
+			<span asp-validation-for="Cd" class="text-danger"></span>
+
+		</div>
+		<div>
+			<div class="row">
+				<div class="col-sm col-6">
+					<div class="input-group mb-3">
+						<span class="input-group-text col-md-3">
+							<label asp-for="DtGive" class="control-label"></label>
+						</span>
+						<input type="date" asp-for="DtGive" class="form-control" />
+						<span asp-validation-for="DtGive" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="col-sm col-6">
+					<div class="input-group mb-3">
+						<span class="input-group-text col-md-3">
+							<label asp-for="DtReturn" class="control-label"></label>
+						</span>
+						<input type="date" asp-for="DtReturn" class="form-control" />
+						<span asp-validation-for="DtReturn" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text col-md-3">
+				<label asp-for="VehicleSprName" class="form-label"></label>
+			</span>
+			<select asp-for="VehicleSpr.Id" asp-items="@ViewBag.Vehicle" class="custom-select col-md-9">
+				<option value="@ViewBag.Vehicle"></option>
+			</select>
+			<span asp-validation-for="VehicleSpr" class="text-danger"></span>
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text col-md-3">
+				<label asp-for="DriverSprName" class="form-label"></label>
+			</span>
+			<select asp-for="DriverSpr.Id" asp-items="@ViewBag.Driver" class="custom-select col-md-9">
+				<option value="@ViewBag.Driver"></option>
+			</select>
+			<span asp-validation-for="DriverSpr" class="text-danger"></span>
+		</div>
+		<div>
+			<div class="row">
+				<div class="col-sm col-6">
+					<div class="input-group mb-3">
+						<span class="input-group-text col-md-3">
+							<label asp-for="DtOut" class="control-label"></label>
+						</span>
+						<input type="datetime-local" step="60" asp-for="DtOut" class="form-control" />
+						<span asp-validation-for="DtOut" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="col-sm col-6">
+					<div class="input-group mb-3">
+						<span class="input-group-text col-md-3">
+							<label asp-for="DtIn" class="control-label"></label>
+						</span>
+						<input type="datetime-local" step="60" asp-for="DtIn" class="form-control" />
+						<span asp-validation-for="DtIn" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<div class="row">
+				<div class="col-sm col-6">
+					<div class="input-group mb-3">
+						<span class="input-group-text col-md-3">
+
+							<label asp-for="SpdOut" class="control-label"></label>
+						</span>
+						<input type="number"
+							   asp-for="SpdOut" class="form-control" />
+						<span asp-validation-for="SpdOut" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="col-sm col-6">
+					<div class="input-group mb-3">
+						<span class="input-group-text col-md-3">
+							<label asp-for="SpdIn" class="control-label"></label>
+						</span>
+						<input type="number"
+							   asp-for="SpdIn" class="form-control" />
+						<span asp-validation-for="SpdIn" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="input-group mb-3">
+				<span class="input-group-text col-md-3">
+					<label asp-for="FuelSprName" class="form-label"></label>
+				</span>
+				<select asp-for="FuelSpr.Id" asp-items="@ViewBag.Fuel" class="custom-select col-md-9">
+					<option value="@ViewBag.Fuel"></option>
+				</select>
+				<span asp-validation-for="FuelSpr" class="text-danger"></span>
+			</div>
+			<div>
+				<div class="row">
+					<div class="col-sm col-6">
+						<div class="input-group mb-3">
+							<span class="input-group-text col-md-3">
+								<label asp-for="FuelBalOut" class="control-label"></label>
+							</span>
+							<input type="number" step="0.01"
+								   id="fuelBalOut"
+								   asp-for="FuelBalOut" class="form-control" />
+							<span asp-validation-for="FuelBalOut" class="text-danger"></span>
+						</div>
+					</div>
+					<div class="col-sm col-6">
+						<div class="input-group mb-3">
+							<span class="input-group-text col-md-3">
+								<label asp-for="FuelBalIn" class="control-label"></label>
+							</span>
+							<input type="number" step="0.01"
+								   id="fuelBalIn"
+								   asp-for="FuelBalIn" class="form-control" />
+							<span asp-validation-for="FuelBalIn" class="text-danger"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="input-group mb-3">
+				<span class="input-group-text col-md-3">
+					<label asp-for="FuelFillUp" class="control-label"></label>
+				</span>
+				<input type="number" step="0.01"
+					   id="fuelFillUp"
+					   asp-for="FuelFillUp" class="form-control" />
+				<span asp-validation-for="FuelFillUp" class="text-danger"></span>
+			</div>
+			<div class="input-group mb-3">
+				<span class="input-group-text col-md-3">
+					<label asp-for="FuelConsumFact" class="control-label"></label>
+				</span>
+				<input type="number" step="0.01"
+					   asp-for="FuelConsumFact" class="form-control" />
+				<span asp-validation-for="FuelConsumFact" class="text-danger"></span>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<input type="submit" value="Save" class="btn btn-primary" />
+		</div>
+	</form>
+</div>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
